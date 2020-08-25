@@ -5,10 +5,23 @@
 
 
 def character_select():
-    user = "Toothbrush"
+    choice = ""
+    user = ""
     opponent = "Plaque"
-    characters = [user, opponent]
+    valid_input = ["1", "2", "3"]
+    user_characters = ["(1) Toothbrush", "(2) Floss", "(3) Mouthwash"]
 
+    print(user_characters)
+    while not(choice in valid_input):
+        choice = input("Please choose a character: ")
+    if choice == "1":
+        user = "Toothbrush"
+    elif choice == "2":
+        user = "Floss"
+    elif choice == "3":
+        user = "Mouthwash"
+    
+    characters = [user, opponent]
     return characters
 
 
@@ -23,11 +36,11 @@ def turns(characters):
     for i in range(3):
         attack = input("Press ENTER to attack: ")
         if attack == "":
-            print("{} has successfully brushed away {}.".format(characters[0],characters[1]))
+            print("{} has successfully cleaned away {}.".format(characters[0],characters[1]))
             success = True
             user_count += 1
         elif attack != "":
-            print("{} was not able to brush away {}.".format(characters[0],characters[1]))
+            print("{} was not able to clean away {}.".format(characters[0],characters[1]))
             success = False
 
         if success == False:
