@@ -5,9 +5,11 @@
 
 
 def character_select():
+    import random
+    roll = 0
     choice = ""
     user = ""
-    opponent = "Plaque"
+    opponent = ""
     valid_input = ["1", "2", "3"]
     user_characters = ["(1) Toothbrush", "(2) Floss", "(3) Mouthwash"]
 
@@ -20,7 +22,16 @@ def character_select():
         user = "Floss"
     elif choice == "3":
         user = "Mouthwash"
-    
+
+    roll = random.randint(0, 2)
+    if roll == 0:
+        opponent = "Plaque"
+    elif roll == 1:
+        opponent = "Bad Breath"
+    elif roll == 2:
+        opponent = "Cavities"        
+
+    print("You have chosen {}".format(user))
     characters = [user, opponent]
     return characters
 
@@ -31,7 +42,7 @@ def turns(characters):
     user_count = 0
     opponent_count = 0
     attack = ""
-    print("Welcome")
+    print("Welcome {}".format(characters[0])    )
 
     for i in range(3):
         attack = input("Press ENTER to attack: ")
@@ -51,13 +62,14 @@ def turns(characters):
         print()
     
     if user_count > opponent_count:
-        print("{} wins!".format(characters[0]))
+        print("{} wins! You have conquered dental problems :)".format(characters[0]))
     elif user_count < opponent_count:
-        print("{} wins!".format(characters[1]))
+        print("{} wins! You now have oral cancer :(".format(characters[1]))
     print()
 
 def main():
     characters = character_select()
+    print()
     turns(characters)
     print("Game Over")
         
