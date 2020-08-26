@@ -7,12 +7,19 @@
 def character_select():
     import random
     roll = 0
+    EMPTY = ""
     choice = ""
+    username = ""
     user = ""
     opponent = ""
     valid_input = ["1", "2", "3"]
     user_characters = ["(1) Toothbrush", "(2) Floss", "(3) Mouthwash"]
 
+    username = input("Enter your name: ").lower().title().strip()
+    while username == EMPTY:
+        print("Please enter a name")
+        username = input("Enter your name: ").lower().title().strip()
+    
     print(user_characters)
     while not(choice in valid_input):
         choice = input("Please choose a character: ")
@@ -32,7 +39,7 @@ def character_select():
         opponent = "Cavities"        
 
     print("You have chosen {}".format(user))
-    characters = [user, opponent]
+    characters = [user, opponent, username]
     return characters
 
 
@@ -42,7 +49,8 @@ def turns(characters):
     user_count = 0
     opponent_count = 0
     attack = ""
-    print("Welcome {}".format(characters[0])    )
+    print("Welcome {} the {}".format(characters[2], characters[0]))
+    print("{} is about to ruin your teeth!".format(characters[1]))
 
     for i in range(3):
         attack = input("Press ENTER to attack: ")
@@ -72,6 +80,3 @@ def main():
     print()
     turns(characters)
     print("Game Over")
-        
-
-main()
