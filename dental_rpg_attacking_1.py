@@ -27,7 +27,7 @@ def character_select():
 
     # Function which displays all the characters and moves they have
     # available
-    user_moveset = moves(user_characters)
+    user_moveset = moveset(user_characters)
 
     # Asks the user to choose their character which they will use
     while not(choice in valid_input):
@@ -48,26 +48,28 @@ def character_select():
     elif roll == 2:
         opponent = "Cavities"        
 
-    print("You have chosen {}".format(user))
+    print("You have chosen: {}".format(user))
     characters = [user, opponent, username]
     return characters, user_moveset
 
 
-def moves(user_characters):
+def moveset(user_characters):
     """
     Displays the moves that each different character can use
     along with the damages
     """
-    toothbrush_moveset = ["Mindless Brushing - 25 ATK",
-                          "Back and Forth Strokes - 50 ATK",                          
-                          "Circular Brushing Method - 60 ATK"]
-    floss_moveset = ["Agressively Floss - 20 ATK",
-                     "Gently Floss - 40 ATK",
-                     "Carefully Floss with Great Technique - 50 ATK"]
-    mouthwash_moveset = ["10 second Clean - 15 ATK",
-                         "Gargle - 30 ATK",
-                         "Swish - 50 ATK"]
-    user_moveset = [toothbrush_moveset, floss_moveset, mouthwash_moveset]    
+    toothbrush_moveset = ["Mindless Brushing - 25 DMG",
+                          "Back and Forth Strokes - 50 DMG",                          
+                          "Circular Brushing Method - 60 DMG"]
+    floss_moveset = ["Agressively Floss - 20 DMG",
+                     "Gently Floss - 40 DMG",
+                     "Carefully Floss with Great Technique - 50 DMG"]
+    mouthwash_moveset = ["10 second Clean - 15 DMG",
+                         "Gargle - 30 DMG",
+                         "Swish - 50 DMG"]
+    user_moveset = [toothbrush_moveset,
+                    floss_moveset,
+                    mouthwash_moveset]    
     character_moveset = {}
 
     for i in range(0, 3):
@@ -79,96 +81,231 @@ def moves(user_characters):
             print("Move:", moves)
         print()
     return user_moveset
+
+
+def ai_moveset():
+    """
+    AI moveset that will be used to combat the user's character
+    """
+    plaque_moveset = {"Yellowing" : 15,
+                      "Discomfort" : 30,
+                      "Tooth Decay" : 35}
+    bad_breath_moveset = {"Stinky" : 10,
+                          "Bacterial Growth" : 20,
+                          "Ketone Buildup" : 25}
+    cavities_moveset = {"Toothache" : 20,
+                        "Infection" : 25,
+                        "Tooth Loss" : 35}
     
+    return plaque_moveset, bad_breath_moveset, cavities_moveset
+
     
 def turns(characters, user_moveset):
     """
     Turns in between the character and the opponent where they
     can attack
     """
+    import random
     success = True
-    user_count = 0
-    opponent_count = 0
-    attack = ""
-    move_1 = {}
-    move_2 = {}
-    move_3 = {}
-
-    # Starting health points for the user and the opponent
     user_health = 100
     opponent_health = 100
+    turn = 0
+    start = "enter"
     
     print("Welcome {} the {}".format(characters[2], characters[0]))
     print("{} is about to ruin your teeth!".format(characters[1]))
+    print()
 
+    # Randomises who starts
+    while start != "":
+        start = input("Press ENTER to start: ")
+    if start == "":
+        print("===========")
+        turn = random.randint(1, 2)
+        while user_health > 0 and opponent_health > 0:
+            if turn == 1:
+                if characters[0] == "Toothbrush":
+                    opponent_health = user_attack(characters, opponent_health)
+                    turn = 2
+                    print()
+                elif characters[0] == "Floss":
+                    opponent_health = user_attack(characters, opponent_health)
+                    turn = 2
+                    print()
+                elif characters[0] == "Mouthwash":
+                    opponent_health = user_attack(characters, opponent_health)
+                    turn = 2
+                    print()
+
+            elif turn == 2:
+                if characters[1] == "Plaque":
+                    user_health = ai_attack(characters, user_health)
+                    turn = 1
+                    print()
+                elif characters[1] == "Bad Breath":
+                    user_health = ai_attack(characters, user_health)
+                    turn = 1
+                    print()
+                elif characters[1] == "Cavities":
+                    user_health = ai_attack(characters, user_health)
+                    turn = 1
+                    print()
+
+    if user_health > opponent_health:
+        print("{} wins! You have conquered dental problems :)".format(characters[0]))
+    elif opponent_health > user_health:
+        print("{} wins! You now have oral cancer :(".format(characters[1]))
+        
+
+def ai_attack(characters, user_health):
+    """
+    AI movesets they will use to attack the user's character
+    """
+    import random
+    plaque_moveset, bad_breath_moveset, cavities_moveset = ai_moveset()
+    
+    if characters[1] == "Plaque":
+        if user_health > 0:
+            attack = random.randint(1, 3)
+            if attack == 1:
+                user_health -= plaque_moveset["Yellowing"]
+                print("{} has used Yellowing!".format(characters[1]))
+                print("{} is now at {} health".format(characters[0], user_health))
+            elif attack == 2:
+                user_health -= plaque_moveset["Discomfort"]
+                print("{} has used Discomfort!".format(characters[1]))
+                print("{} is now at {} health".format(characters[0], user_health))
+            elif attack == 3:
+                user_health -= plaque_moveset["Tooth Decay"]
+                print("{} has used Tooth Decay!".format(characters[1]))
+                print("{} is now at {} health".format(characters[0], user_health))
+
+    elif characters[1] == "Bad Breath":
+        if user_health > 0:
+            attack = random.randint(1, 3)
+            if attack == 1:
+                user_health -= bad_breath_moveset["Stinky"]
+                print("{} has used Stinky!".format(characters[1]))
+                print("{} is now at {} health".format(characters[0], user_health))
+            elif attack == 2:
+                user_health -= bad_breath_moveset["Bacterial Growth"]
+                print("{} has used Bacterial Growth!".format(characters[1]))
+                print("{} is now at {} health".format(characters[0], user_health))
+            elif attack == 3:
+                user_health -= bad_breath_moveset["Ketone Buildup"]
+                print("{} has used Ketone Buildup!".format(characters[1]))
+                print("{} is now at {} health".format(characters[0], user_health))
+
+    elif characters[1] == "Cavities":
+        if user_health > 0:
+            attack = random.randint(1, 3)
+            if attack == 1:
+                user_health -= cavities_moveset["Toothache"]
+                print("{} has used Toothache!".format(characters[1]))
+                print("{} is now at {} health".format(characters[0], user_health))
+            elif attack == 2:
+                user_health -= cavities_moveset["Infection"]
+                print("{} has used Infection!".format(characters[1]))
+                print("{} is now at {} health".format(characters[0], user_health))
+            elif attack == 3:
+                user_health -= cavities_moveset["Tooth Loss"]
+                print("{} has used Tooth Loss!".format(characters[1]))
+                print("{} is now at {} health".format(characters[0], user_health))
+                
+    return user_health
+            
+
+def user_attack(characters, opponent_health):
+    """
+    Attacking between the user and the opponent
+    """
+    loop = True
+    toothbrush_moves = {"(1) Mindless Brushing" : 25,
+                        "(2) Back and Forth Strokes" : 30,
+                        "(3) Circular Brushing Method" : 35}
+    floss_moves = {"(1) Agressively Floss" : 15,
+                   "(2) Gently Floss" : 20,
+                   "(3) Carefully Floss with Great Technique" : 30}
+    mouthwash_moves = {"(1) 10 second Clean" : 10,
+                       "(2) Gargle" : 25,
+                       "(3) Swish" : 30}
+
+    # If user uses Toothbrush then its moves will be used
     if characters[0] == "Toothbrush":
-        moves = {"(1) Mindless Brushing" : 25,
-                 "(2) Back and Forth Strokes" : 50,
-                 "(3) Circular Brushing Method" : 60}
-        for move, damage in sorted(moves.items()):
-            print("Move: {} DMG: {}".format(move, damage))
-        print()
-        while opponent_health > 0:
+        for move, damage in sorted(toothbrush_moves.items()):
+            print("{} - DMG: {}".format(move, damage))
+        while loop == True:
             attack = input("Choose a move to use: [1, 2, 3]: ")
+            print()
             if attack == "1":
-                opponent_health -= 25
-                print("{} is now at {}".format(characters[1], opponent_health))
-                print()
+                opponent_health -= toothbrush_moves["(1) Mindless Brushing"]
+                print("{} has used Mindless Brushing!".format(characters[0]))
+                print("{} is now at {} health".format(characters[1], opponent_health))
+                loop = False
             elif attack == "2":
-                opponent_health -= 50
-                print("{} is now at {}".format(characters[1], opponent_health))
-                print()
+                opponent_health -= toothbrush_moves["(2) Back and Forth Strokes"]
+                print("{} has used Back and Forth Strokes!".format(characters[0]))
+                print("{} is now at {} health".format(characters[1], opponent_health))
+                loop = False
             elif attack == "3":
-                opponent_health -= 60
-                print("{} is now at {}".format(characters[1], opponent_health))
-                print()
+                opponent_health -= toothbrush_moves["(3) Circular Brushing Method"]
+                print("{} has used Circular Brushing Method!".format(characters[0]))
+                print("{} is now at {} health".format(characters[1], opponent_health))
+                loop = False
 
-# TURN INTO FUNCTION                    
-"""
+    # If user uses Floss then its moves will be used
     elif characters[0] == "Floss":
-        move_1 = {"(1) Agressively Floss" : 20}
-        move_2 = {"(2) Gently Floss" : 40}
-        move_3 = {"(3) Carefully Floss with Great Technique" : 50}
-        print("Moves available: {}, {}, {}".format(move_1, move_2, move_3))
-        while opponent_health > 0:
+        for move, damage in sorted(floss_moves.items()):
+            print("{} - DMG: {}".format(move, damage))
+        print()
+        while loop == True:
             attack = input("Choose a move to use: [1, 2, 3]: ")
             if attack == "1":
-                opponent_health -= 20
-                print("{} is now at {}".format(characters[1], opponent_health))
-                print()
+                opponent_health -= floss_moves["(1) Agressively Floss"]
+                print("{} has used Agressively Floss!".format(characters[0]))
+                print("{} is now at {} health".format(characters[1], opponent_health))
+                loop = False
             elif attack == "2":
-                opponent_health -= 40
-                print("{} is now at {}".format(characters[1], opponent_health))
-                print()
+                opponent_health -= floss_moves["(2) Gently Floss"]
+                print("{} has used Gently Floss!".format(characters[0]))
+                print("{} is now at {} health".format(characters[1], opponent_health))
+                loop = False
             elif attack == "3":
-                opponent_health -= 50
-                print("{} is now at {}".format(characters[1], opponent_health))
-                print()
+                opponent_health -= floss_moves["(3) Carefully Floss with Great Technique"]
+                print("{} has used Carefully Floss with Great Technique!".format(characters[0]))
+                print("{} is now at {} health".format(characters[1], opponent_health))
+                loop = False
 
-
+    # If user uses Mouthwash then its moves will be used
     elif characters[0] == "Mouthwash":
-        move_1 = {"(1) 10 second Clean" : 25}
-        move_2 = {"(2) Gargle" : 50}
-        move_3 = {"(3) Swish" : 75}
-        print("Moves available: {}, {}, {}".format(move_1, move_2, move_3))
-        while opponent_health > 0:
+        for move, damage in sorted(mouthwash_moves.items()):
+            print("{} - DMG: {}".format(move, damage))
+        print()
+        while loop == True:
             attack = input("Choose a move to use: [1, 2, 3]: ")
             if attack == "1":
-                opponent_health -= 15
-                print("{} is now at {}".format(characters[1], opponent_health))
-                print()
+                opponent_health -= mouthwash_moves["(1) 10 second Clean"]
+                print("{} has used 10 second Clean!".format(characters[0]))
+                print("{} is now at {} health".format(characters[1], opponent_health))
+                loop = False
             elif attack == "2":
-                opponent_health -= 30
-                print("{} is now at {}".format(characters[1], opponent_health))
-                print()
+                opponent_health -= mouthwash_moves["(2) Gargle"]
+                print("{} has used Gargle!".format(characters[0]))
+                print("{} is now at {} health".format(characters[1], opponent_health))
+                loop = False
             elif attack == "3":
-                opponent_health -= 50
-                print("{} is now at {}".format(characters[1], opponent_health))
-                print()
-"""
+                opponent_health -= mouthwash_moves["(3) Swish"]
+                print("{} has used Swish!".format(characters[0]))
+                print("{} is now at {} health".format(characters[1], opponent_health))
+                loop = False
+
+    return opponent_health
+    
 
 def main():
+    print("Welcome to the Dental RPG")
     characters, user_moveset = character_select()
     print()
     turns(characters, user_moveset)
+    print()
     print("Game Over")
