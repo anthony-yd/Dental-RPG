@@ -23,7 +23,8 @@ def character_select():
         print("Please enter a name")
         username = input("Enter your name: ").lower().title().strip()
     
-    print(user_characters)
+    for character in user_characters:
+        print(character)
     while not(choice in valid_input):
         choice = input("Please choose a character: ")
     if choice == "1":
@@ -51,10 +52,9 @@ def turns(characters):
     Function which starts the turns between the user
     and opponent
     """
-    loop = True
-    success = True
-    user_count = 0
-    opponent_count = 0
+    stats = []
+    user_rounds = 0
+    opponent_rounds = 0
     attack = ""
     user_health = 100
     opponent_health = 100
@@ -63,35 +63,56 @@ def turns(characters):
     turn = 1
     print("Welcome {} the {}".format(characters[2], characters[0]))
     print("{} is about to ruin your teeth!".format(characters[1]))
-
-
+    print()
+    print("=================")
+    
     while user_health > 0 and opponent_health > 0:
         if turn == 1:
             attack = input("Press ENTER to attack: ")
             if attack == "":
                 opponent_health, health_difference = user_attack(opponent_health)
-                print("{} has cleaned {} for {} health.".format(characters[0], characters[1], health_difference))
-                success = True
+                print("{} has cleaned {} for {} health.".format(characters[0],
+                                                                characters[1],
+                                                                health_difference))
+                user_rounds += 1
                 turn = 2
-                user_count += 1
+                print()
+                
             elif attack != "":
-                print("{} was not able to clean {}.".format(characters[0], characters[1]))
-                success = False
+                print("{} was not able to clean {}.".format(characters[0],
+                                                            characters[1]))
                 turn = 2
+                print()
+                
         elif turn == 2:
-            if success == False:
-                user_health, health_difference = opponent_attack(user_health)
-                print("{} has done {} damage to your teeth!".format(characters[1]))
-                turn = 1
-                opponent_count += 1
-            elif success == True:
-                print("{} was not able to harm your teeth.".format(characters[1]))
-                turn = 1
+            user_health, health_difference = opponent_attack(user_health)
+            print("{} has done {} damage to your teeth!".format(characters[1],
+                                                                health_difference))
+            opponent_rounds += 1
+            turn = 1
             print()
-    
-    if user_count > opponent_count:
+
+            
+        print("{} is now on {} health".format(characters[1],
+                                              opponent_health))
+        print("{} is now on {} health".format(characters[0],
+                                              user_health))
+        print("=================")
+
+    stats = [user_health, user_rounds, opponent_health, opponent_rounds]
+    return stats
+
+
+def end_dialogue(characters, stats):
+    if stats[0] > stats[2]:
+        print("{} has lasted against {} for {} rounds".format(characters[1],
+                                                           characters[0],
+                                                           stats[3]))
         print("{} wins! You have conquered dental problems :)".format(characters[0]))
-    elif user_count < opponent_count:
+    elif stats[0] < stats[2]:
+        print("{} has lasted against {} for {} rounds".format(characters[0],
+                                                           characters[1],
+                                                           stats[1]))
         print("{} wins! You now have oral cancer :(".format(characters[1]))
     print()
 
@@ -121,5 +142,7 @@ def opponent_attack(user_health):
 def main():
     characters = character_select()
     print()
-    turns(characters)
+    stats = turns(characters)
+    print()
+    end_dialogue(characters, stats)
     print("Game Over")
