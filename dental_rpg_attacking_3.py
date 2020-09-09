@@ -21,10 +21,10 @@ def character_select():
     user_characters = ["(1) Toothbrush", "(2) Floss", "(3) Mouthwash"]
 
     # asks user for name and error checks it
-    username = input("Enter your name\n>>> ").lower().title().strip()
+    username = input("Enter your name\n>> ").lower().title().strip()
     while username == EMPTY:
         print("Please enter a name")
-        username = input("Enter your name\n>>> ").lower().title().strip()
+        username = input("Enter your name\n>> ").lower().title().strip()
 
     # asks the user to input their favored
     # character
@@ -32,7 +32,7 @@ def character_select():
     for character in user_characters:
         print(character)
     while not(choice in valid_input):
-        choice = input("Please choose a character\n>>> ")
+        choice = input("Please choose a character\n>> ")
     if choice == "1":
         user = "Toothbrush"
     elif choice == "2":
@@ -64,18 +64,30 @@ class Question:
         self.answer = answer
 
 question_prompts = [
-    "How long should you brush your teeth?\n(a) 1 minute\n(b) 2 minutes\n>>> ",
+    "How long should you brush your teeth?\n(a) 1 minute\n(b) 2 minutes\n>> ",
     "\n"
-    "What is mouthwash most effective against?\n(a) Bad breath\n(b) Cavities\n>>> ",
+    "What is mouthwash most effective against?\n(a) Bad breath\n(b) Cavities\n>> ",
     "\n"
-    "How long should your floss be before using?\n(a) 18 inches\n(b) 16 inches\n>>> ",
+    "How long should your floss be before using?\n(a) 18 inches\n(b) 16 inches\n>> ",
+    "\n"
+    "What causes tooth decay?\n(a) Acid\n(b) Caffeine\n>> ",
+    "\n"
+    "What is Halitosis the medical term for?\n(a) Black hairy tongue\n(b) Bad breath\n>> ",
+    "\n"
+    "What is the best way prevent gum disease?\n(a) Remove plaque\n(b) Flouride toothpaste\n>> ",
+    "\n"
+    "When should toothbrushes be replaced?\n(a) 2 to 3 months\n(b) 4 to 5 months\n>> ",
     "\n"
     ]
 
 questions = [
     Question(question_prompts[0], "b"),
     Question(question_prompts[1], "a"),
-    Question(question_prompts[2], "a")
+    Question(question_prompts[2], "a"),
+    Question(question_prompts[3], "a"),
+    Question(question_prompts[4], "b"),
+    Question(question_prompts[5], "a"),
+    Question(question_prompts[6], "a")
     ]
 
 
@@ -116,7 +128,9 @@ def run_quiz(questions, characters):
         print("{}, you have conquered bad dental hygiene".format(characters[2]))
     elif score < ai_score:
         print("{}, you have not been able to conquer bad dental hygiene :(".format(characters[2]))
-
+    elif score == ai_score:
+        print("{}, you have tied with {}".format(characters[2], characters[1]))
+    
     return score
 
 
