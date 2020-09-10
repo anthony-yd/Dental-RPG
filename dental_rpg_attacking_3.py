@@ -21,10 +21,10 @@ def character_select():
     user_characters = ["(1) Toothbrush", "(2) Floss", "(3) Mouthwash"]
 
     # asks user for name and error checks it
-    username = input("Enter your name\n>> ").lower().title().strip()
+    username = input("Enter your name\n> ").lower().title().strip()
     while username == EMPTY:
         print("Please enter a name")
-        username = input("Enter your name\n>> ").lower().title().strip()
+        username = input("Enter your name\n> ").lower().title().strip()
 
     # asks the user to input their favored
     # character
@@ -32,7 +32,7 @@ def character_select():
     for character in user_characters:
         print(character)
     while not(choice in valid_input):
-        choice = input("Please choose a character\n>> ")
+        choice = input("Please choose a character\n> ")
     if choice == "1":
         user = "Toothbrush"
     elif choice == "2":
@@ -64,19 +64,19 @@ class Question:
         self.answer = answer
 
 question_prompts = [
-    "How long should you brush your teeth?\n(a) 1 minute\n(b) 2 minutes\n>> ",
+    "How long should you brush your teeth?\n(a) 1 minute\n(b) 2 minutes\n> ",
     "\n"
-    "What is mouthwash most effective against?\n(a) Bad breath\n(b) Cavities\n>> ",
+    "What is mouthwash most effective against?\n(a) Bad breath\n(b) Cavities\n> ",
     "\n"
-    "How long should your floss be before using?\n(a) 18 inches\n(b) 16 inches\n>> ",
+    "How long should your floss be before using?\n(a) 18 inches\n(b) 16 inches\n> ",
     "\n"
-    "What causes tooth decay?\n(a) Acid\n(b) Caffeine\n>> ",
+    "What causes tooth decay?\n(a) Acid\n(b) Caffeine\n> ",
     "\n"
-    "What is Halitosis the medical term for?\n(a) Black hairy tongue\n(b) Bad breath\n>> ",
+    "What is Halitosis the medical term for?\n(a) Black hairy tongue\n(b) Bad breath\n> ",
     "\n"
-    "What is the best way prevent gum disease?\n(a) Remove plaque\n(b) Flouride toothpaste\n>> ",
+    "What is the best way prevent gum disease?\n(a) Remove plaque\n(b) Flouride toothpaste\n> ",
     "\n"
-    "When should toothbrushes be replaced?\n(a) 2 to 3 months\n(b) 4 to 5 months\n>> ",
+    "When should toothbrushes be replaced?\n(a) 2 to 3 months\n(b) 4 to 5 months\n> ",
     "\n"
     ]
 
@@ -97,16 +97,27 @@ def run_quiz(questions, characters):
     """
     score = 0
     ai_score = 0
+    answer = ""
     # health of both user and ai is based on
     # the length of the quiz
     # whoever wins the most rounds wins
     health = len(questions)
     ai_health = len(questions)
 
-    print("START\n")
+    print("=================================")
+    print("START")
+    print("=================================")
+    print("Your health         |  {}".format(health))
+    print("Opponent health     |  {}".format(ai_health))
+    print("=================================")
+    print()
     
     for question in questions:
         answer = input(question.prompt).lower().strip()
+        while answer != "a" and answer != "b":
+            print("Please answer with 'a' or 'b'")
+            print()
+            answer = input(question.prompt).lower().strip()
         if answer == question.answer:
             print("You are correct")
             ai_health -= 1
@@ -122,16 +133,19 @@ def run_quiz(questions, characters):
 {1} is on {3} health""".format(characters[0], characters[1], characters[2], ai_health, health))
             ai_score += 1
 
+    print()
+    print("=================================")
+    print("Your health         |  {}".format(health))
+    print("Opponent health     |  {}".format(ai_health))
+    print("=================================")
     print("\nYou scored {} out of {}".format(score, len(questions)))
-
+    
     if score > ai_score:
         print("{}, you have conquered bad dental hygiene".format(characters[2]))
     elif score < ai_score:
         print("{}, you have not been able to conquer bad dental hygiene :(".format(characters[2]))
     elif score == ai_score:
         print("{}, you have tied with {}".format(characters[2], characters[1]))
-    
-    return score
 
 
 def main():
