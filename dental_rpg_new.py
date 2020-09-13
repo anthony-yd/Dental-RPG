@@ -211,7 +211,9 @@ def attacking(characters, ai_health):
         for move, damage in toothbrush.items():
             count += 1
             print("({}) {} - {} DMG".format(count, move, damage))
+        choice = input("> ")
         while not (choice in valid_input):
+            print("Please answer with '1', '2', or '3'")
             choice = input("> ")
     # depending on the choice the damage
     # will be applied
@@ -232,7 +234,9 @@ def attacking(characters, ai_health):
         for move, damage in floss.items():
             count += 1
             print("({}) {} - {} DMG".format(count, move, damage))
+        choice = input("> ")    
         while not (choice in valid_input):
+            print("Please answer with '1', '2', or '3'")
             choice = input("> ")
     # depending on the choice the damage
     # will be applied
@@ -253,7 +257,9 @@ def attacking(characters, ai_health):
         for move, damage in mouthwash.items():
             count += 1
             print("({}) {} - {} DMG".format(count, move, damage))
+        choice = input("> ")
         while not (choice in valid_input):
+            print("Please answer with '1', '2', or '3'")
             choice = input("> ")
     # depending on the choice the damage
     # will be applied
