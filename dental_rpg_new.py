@@ -66,31 +66,31 @@ class Question:
 # questions prompts that the user will be asked
 question_prompts = [
     "\n"
-    "How long should you brush your teeth?\n(a) 1 minute\n(b) 2 minutes\n> ",
+    "How long should you brush your teeth?\n(1) 1 minute\n(2) 2 minutes\n> ",
     "\n"
-    "What is mouthwash most effective against?\n(a) Bad breath\n(b) Cavities\n> ",
+    "What is mouthwash most effective against?\n(1) Bad breath\n(2) Cavities\n> ",
     "\n"
-    "How long should your floss be before using?\n(a) 18 inches\n(b) 16 inches\n> ",
+    "How long should your floss be before using?\n(1) 18 inches\n(2) 16 inches\n> ",
     "\n"
-    "What causes tooth decay?\n(a) Acid\n(b) Caffeine\n> ",
+    "What causes tooth decay?\n(2) Acid\n(2) Caffeine\n> ",
     "\n"
-    "What is Halitosis the medical term for?\n(a) Black hairy tongue\n(b) Bad breath\n> ",
+    "What is Halitosis the medical term for?\n(1) Black hairy tongue\n(2) Bad breath\n> ",
     "\n"
-    "What is the best way prevent gum disease?\n(a) Remove plaque\n(b) Flouride toothpaste\n> ",
+    "What is the best way prevent gum disease?\n(1) Remove plaque\n(2) Flouride toothpaste\n> ",
     "\n"
-    "When should toothbrushes be replaced?\n(a) 2 to 3 months\n(b) 4 to 5 months\n> ",
+    "When should toothbrushes be replaced?\n(1) 2 to 3 months\n(2) 4 to 5 months\n> ",
     "\n"
     ]
 
 # list will will be iterated through
 questions = [
-    Question(question_prompts[0], "b"),
-    Question(question_prompts[1], "a"),
-    Question(question_prompts[2], "a"),
-    Question(question_prompts[3], "a"),
-    Question(question_prompts[4], "b"),
-    Question(question_prompts[5], "a"),
-    Question(question_prompts[6], "a")
+    Question(question_prompts[0], "2"),
+    Question(question_prompts[1], "1"),
+    Question(question_prompts[2], "1"),
+    Question(question_prompts[3], "1"),
+    Question(question_prompts[4], "2"),
+    Question(question_prompts[5], "1"),
+    Question(question_prompts[6], "1")
     ]
 
 # shuffles the questions
@@ -119,8 +119,8 @@ Opponent health     |  {}% HP
         if ai_health < 0 or ai_health == 0:
             break
         answer = input(question.prompt).lower().strip()
-        while answer != "a" and answer != "b":
-            print("Please answer with 'a' or 'b'")
+        while answer != "1" and answer != "2":
+            print("Please answer with '1' or '2'")
             print()
             answer = input(question.prompt).lower().strip()
         if answer == question.answer:
@@ -153,14 +153,14 @@ Opponent health     |  {}% HP
     print()
     print("---------------------------------")
     print()
-    if health > ai_health and (ai_health < 0 or ai_health == 0):
+    if health > ai_health and ai_health <= 0:
         print("""=================================
 Your health         |  {}% HP
 Opponent health     |  0% HP
 =================================
 Congratulations, {}, you have conquered bad dental hygiene :)""".format(health,
                                                                         characters[2]))
-    elif health < ai_health and (health < 0 or health == 0):
+    elif health < ai_health and health <= 0:
         print("""=================================
 Your health         |  0% HP
 Opponent health     |  {}% HP
