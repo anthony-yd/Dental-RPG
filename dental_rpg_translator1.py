@@ -78,9 +78,13 @@ def menu():
                     language = "Maori"
             elif menu_choice == "3":
                 break
-            
+    return language
+    
 
 def start(language):
+    """
+    Function which starts the rest of the code
+    """
     characters = character_select(language)
     print()
     run_game(questions, characters, language)
@@ -274,7 +278,7 @@ Opponent health     |  {}% HP
             if answer == question.answer:
                 # user attacking function which allows them to
                 # select the move they would like to use
-                ai_health = attacking(characters, ai_health)
+                ai_health = attacking(characters, ai_health, language)
                 # if statement so the program knows when to show
                 # the status of the players
                 if ai_health > 0:
@@ -285,7 +289,7 @@ Opponent health     |  {}% HP
 =================================""".format(health, ai_health))
             else:
                 # AI attacking function
-                health = ai_attacking(characters, health)
+                health = ai_attacking(characters, health, language)
                 # if statement so the program knows when to show
                 # the status of the players
                 if health > 0:
@@ -316,7 +320,7 @@ Hauora whakahee     |  {}% HP
             if answer == question.answer:
                 # user attacking function which allows them to
                 # select the move they would like to use
-                ai_health = attacking(characters, ai_health)
+                ai_health = attacking(characters, ai_health, language)
                 # if statement so the program knows when to show
                 # the status of the players
                 if ai_health > 0:
@@ -327,7 +331,7 @@ Hauora whakahee     |  {}% HP
 =================================""".format(health, ai_health))
             else:
                 # AI attacking function
-                health = ai_attacking(characters, health)
+                health = ai_attacking(characters, health, language)
                 # if statement so the program knows when to show
                 # the status of the players
                 if health > 0:
@@ -349,25 +353,32 @@ def ending(characters, health, ai_health, language):
     # end statements that indicate who
     # has won and the health of both
     # parties
-    print()
-    print("---------------------------------")
-    print()
-    if health > ai_health or ai_health <= 0:
-        print("""=================================
+    if language == "English":
+        print()
+        print("---------------------------------")
+        print()
+        if health > ai_health or ai_health <= 0:
+            print("""=================================
 Your health         |  {}% HP
 Opponent health     |  0% HP
 =================================
 Congratulations, {}, you have conquered bad dental hygiene :)""".format(health,
                                                                         characters[2]))
-    elif health < ai_health or health <= 0:
-        print("""=================================
+            print()
+            print("Game over")
+            
+        elif health < ai_health or health <= 0:
+            print("""=================================
 Your health         |  0% HP
 Opponent health     |  {}% HP
 =================================
 Sadly, {}, you have not be able to conquer bad dental hygiene :(""".format(ai_health,
                                                                            characters[2]))
-    elif health == ai_health:
-        print("""=================================
+            print()
+            print("Game over")
+            
+        elif health == ai_health:
+            print("""=================================
 Your health         |  {}% HP
 Opponent health     |  {}% HP
 =================================
@@ -375,29 +386,81 @@ Weirdly, {}, you have tied with {}""".format(health,
                                              ai_health,
                                              characters[2],
                                              characters[1]))
-    elif health < 0 and ai_health < 0:
-        print("""=================================
+            print()
+            print("Game over")
+            
+        elif health < 0 and ai_health < 0:
+            print("""=================================
 Your health         |  {}% HP
 Opponent health     |  {}% HP
 =================================
 Sadly, no one wins""".format(health, ai_health, characters[2], characters[1]))
+            print()
+            print("Game over")
+
+    # if language chosen is Maori
+    # prints this version instead
+    elif language == "Maori":
+        print()
+        print("---------------------------------")
+        print()
+        if health > ai_health or ai_health <= 0:
+            print("""=================================
+To hauora           |  {}% HP
+Hauora whakahee     |  0% HP
+=================================
+Kia ora, {}, kua wikitoria e koe te akuaku niho kino :)""".format(health,
+                                                                  characters[2]))
+            print()
+            print("Kua mutu te kemu")
+            
+        elif health < ai_health or health <= 0:
+            print("""=================================
+To hauora           |  0% HP
+Hauora whakahee     |  {}% HP
+=================================
+Te mea oto, {}, kaore i taea e koe te wikitoria i aku aku niho kino :(""".format(ai_health,
+                                                                                 characters[2]))
+            print()
+            print("Kua mutu te kemu")
+            
+        elif health == ai_health:
+            print("""=================================
+To hauora           |  {}% HP
+Hauora whakahee     |  {}% HP
+=================================
+Ngawari, {}, kua herea e koe ki {}""".format(health,
+                                             ai_health,
+                                             characters[2],
+                                             characters[1]))
+            print()
+            print("Kua mutu te kemu")
+            
+        elif health < 0 and ai_health < 0:
+            print("""=================================
+To hauora           |  {}% HP
+Hauora whakahee     |  {}% HP
+=================================
+Te mea pouri, kaore tetahi e wikitoria""".format(health, ai_health, characters[2], characters[1]))
+            print()
+            print("Kua mutu te kemu")
 
 
-def attacking(characters, ai_health):
+def attacking(characters, ai_health, language):
     """
     If user gets the answer correct they may
     choose an attack to use against the AI
     """
     # character movesets
-    toothbrush = {"Poor Brush": 10,
-                  "Good Brush": 20,
-                  "Perfect Brush": 30}
-    floss = {"Poor Floss": 10,
-             "Good Floss": 20,
-             "Perfect Floss": 30}
-    mouthwash = {"Poor Mouthwash": 10,
-                 "Good Mouthwash": 20,
-                 "Perfect Mouthwash": 30}
+    toothbrush = {"Poor Brush": 10, "Good Brush": 20, "Perfect Brush": 30}
+    floss = {"Poor Floss": 10, "Good Floss": 20, "Perfect Floss": 30}
+    mouthwash = {"Poor Mouthwash": 10, "Good Mouthwash": 20, "Perfect Mouthwash": 30}
+
+    # character movesets in maori
+    toothbrush_maori = {"Paraihe Korekore": 10, "Paraihe Pai": 20, "Paraihe Tino": 30}
+    floss_maori = {"Moni Kore Koretake": 10, "Momo Puawai Pai": 20, "Mino Puawai": 30}
+    mouthwash_maori = {"Korekore Mangu": 10, "Maama Ngahuru": 20, "Ngutu Kaha": 30}
+        
     valid_input = ["1", "2", "3"]
     count = 0
     damage = 0
@@ -406,81 +469,153 @@ def attacking(characters, ai_health):
     # if character chosen was 'Toothbrush'
     if characters[0] == "Toothbrush":
         print()
-        print("Choose a move")
-        for move, damage in toothbrush.items():
-            count += 1
-            print("({}) {} - {} DMG".format(count, move, damage))
-        choice = input("> ")
-        while not (choice in valid_input):
-            print("Please answer with '1', '2', or '3'")
+        if language == "English":
+            print("Choose a move")
+            for move, damage in toothbrush.items():
+                count += 1
+                print("({}) {} - {} DMG".format(count, move, damage))
             choice = input("> ")
-    # depending on the choice the damage
-    # will be applied
-        if choice == "1":
-            damage = toothbrush["Poor Brush"]
-            ai_health -= damage
-        elif choice == "2":
-            damage = toothbrush["Good Brush"]
-            ai_health -= damage
-        elif choice == "3":
-            damage = toothbrush["Perfect Brush"]
-            ai_health -= damage
+            while not (choice in valid_input):
+                print("Please answer with '1', '2', or '3'")
+                choice = input("> ")
+            # depending on the choice the damage
+            # will be applied
+            if choice == "1":
+                damage = toothbrush["Poor Brush"]
+                ai_health -= damage
+            elif choice == "2":
+                damage = toothbrush["Good Brush"]
+                ai_health -= damage
+            elif choice == "3":
+                damage = toothbrush["Perfect Brush"]
+                ai_health -= damage
+                
+        elif language == "Maori":
+            print("Kōwhirihia he nekehanga")
+            for move, damage in toothbrush_maori.items():
+                count += 1
+                print("({}) {} - {} DMG".format(count, move, damage))
+            choice = input("> ")
+            while not (choice in valid_input):
+                print("Tena koa whakahoki mai me te '1', '2', te '3' ranei")
+                choice = input("> ")
+            # depending on the choice the damage
+            # will be applied
+            if choice == "1":
+                damage = toothbrush_maori["Paraihe Korekore"]
+                ai_health -= damage
+            elif choice == "2":
+                damage = toothbrush_maori["Paraihe Pai"]
+                ai_health -= damage
+            elif choice == "3":
+                damage = toothbrush_maori["Paraihe Tino"]
+                ai_health -= damage
 
     # if character chosen was 'Floss'
     if characters[0] == "Floss":
         print()
-        print("Choose a move")
-        for move, damage in floss.items():
-            count += 1
-            print("({}) {} - {} DMG".format(count, move, damage))
-        choice = input("> ")    
-        while not (choice in valid_input):
-            print("Please answer with '1', '2', or '3'")
+        if language == "English":
+            print("Choose a move")
+            for move, damage in floss.items():
+                count += 1
+                print("({}) {} - {} DMG".format(count, move, damage))
+            choice = input("> ")    
+            while not (choice in valid_input):
+                print("Please answer with '1', '2', or '3'")
+                choice = input("> ")
+            # depending on the choice the damage
+            # will be applied
+            if choice == "1":
+                damage = floss["Poor Floss"]
+                ai_health -= damage
+            elif choice == "2":
+                damage = floss["Good Floss"]
+                ai_health -= damage
+            elif choice == "3":
+                damage = floss["Perfect Floss"]
+                ai_health -= damage
+
+        elif language == "Maori":
+            print("Kōwhirihia he nekehanga")
+            for move, damage in floss_maori.items():
+                count += 1
+                print("({}) {} - {} DMG".format(count, move, damage))
             choice = input("> ")
-    # depending on the choice the damage
-    # will be applied
-        if choice == "1":
-            damage = floss["Poor Floss"]
-            ai_health -= damage
-        elif choice == "2":
-            damage = floss["Good Floss"]
-            ai_health -= damage
-        elif choice == "3":
-            damage = floss["Perfect Floss"]
-            ai_health -= damage
+            while not (choice in valid_input):
+                print("Tena koa whakahoki mai me te '1', '2', te '3' ranei")
+                choice = input("> ")
+            # depending on the choice the damage
+            # will be applied
+            if choice == "1":
+                damage = floss_maori["Moni Kore Koretake"]
+                ai_health -= damage
+            elif choice == "2":
+                damage = floss_maori["Momo Puawai Pai"]
+                ai_health -= damage
+            elif choice == "3":
+                damage = floss_maori["Mino Puawai"]
+                ai_health -= damage
 
     # if character chosen was 'Mouthwash'
     if characters[0] == "Mouthwash":
         print()
-        print("Choose a move")
-        for move, damage in mouthwash.items():
-            count += 1
-            print("({}) {} - {} DMG".format(count, move, damage))
-        choice = input("> ")
-        while not (choice in valid_input):
-            print("Please answer with '1', '2', or '3'")
+        if language == "English":
+            print("Choose a move")
+            for move, damage in mouthwash.items():
+                count += 1
+                print("({}) {} - {} DMG".format(count, move, damage))
             choice = input("> ")
-    # depending on the choice the damage
-    # will be applied
-        if choice == "1":
-            damage = mouthwash["Poor Mouthwash"]
-            ai_health -= damage
-        elif choice == "2":
-            damage = mouthwash["Good Mouthwash"]
-            ai_health -= damage
-        elif choice == "3":
-            damage = mouthwash["Perfect Mouthwash"]
-            ai_health -= damage
+            while not (choice in valid_input):
+                print("Please answer with '1', '2', or '3'")
+                choice = input("> ")
+            # depending on the choice the damage
+            # will be applied
+            if choice == "1":
+                damage = mouthwash["Poor Mouthwash"]
+                ai_health -= damage
+            elif choice == "2":
+                damage = mouthwash["Good Mouthwash"]
+                ai_health -= damage
+            elif choice == "3":
+                damage = mouthwash["Perfect Mouthwash"]
+                ai_health -= damage
+
+        elif language == "Maori":
+            print("Kōwhirihia he nekehanga")
+            for move, damage in mouthwash_maori.items():
+                count += 1
+                print("({}) {} - {} DMG".format(count, move, damage))
+            choice = input("> ")
+            while not (choice in valid_input):
+                print("Tena koa whakahoki mai me te '1', '2', te '3' ranei")
+                choice = input("> ")
+            # depending on the choice the damage
+            # will be applied
+            if choice == "1":
+                damage = mouthwash_maori["Korekore Mangu"]
+                ai_health -= damage
+            elif choice == "2":
+                damage = mouthwash_maori["Maama Ngahuru"]
+                ai_health -= damage
+            elif choice == "3":
+                damage = mouthwash_maori["Ngutu Kaha"]
+                ai_health -= damage
+                
 
     # end statement which shows who is being attacked
     # and for how much damage
-    print("""{} is being cleaned
+    if language == "English":
+        print("""{} is being cleaned
 Your attack was successful and did {} DMG""".format(characters[1],
+                                                       damage))
+    elif language == "Maori":
+        print("""{} kei te horoia
+I angitu to whakaekenga i te pai {} DMG""".format(characters[1],
                                                        damage))
     return ai_health
     
 
-def ai_attacking(characters, health):
+def ai_attacking(characters, health, language):
     """
     AI attacks
     """
@@ -505,8 +640,13 @@ def ai_attacking(characters, health):
         health -= damage
 
     # indicates to the user what has happened
-    print("""Your attack was unsuccessful
+    if language == "English":
+        print("""Your attack was unsuccessful
 {} has done {} DMG to your teeth""".format(characters[1],
+                                           damage))
+    elif language == "Maori":
+        print("""Kare i angitu to whakaeke
+{} kua mahi {} DMG ki o niho""".format(characters[1],
                                            damage))
     return health
 
@@ -516,5 +656,3 @@ def main():
     Runs the code
     """
     menu()
-    print()
-    print("Game Over")
