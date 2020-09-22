@@ -4,6 +4,10 @@
 # Anthony D
 
 
+import random
+import sys
+
+
 def force_number(question):
     """
     Function which error checks user number inputs so they
@@ -25,12 +29,16 @@ def menu():
     """
     choice = 0
     translate = False
-    loop = True
-    loop_choice = ""
     valid_input = [1, 2, 3]
+    loop = True
+    loop_choice = 0
+    loop_valid_input = [1, 2]
 
     while loop == True:
+        # sets choice back to 0 if user wishes to play again
+        choice = 0
         print("Welcome to Dental RPG")
+        print()
         while not (choice in valid_input):
             choice = force_number("""Please choose an option:
 (1) Start game in English
@@ -38,27 +46,38 @@ def menu():
 (3) Quit
 > """)
         print()
-    
+        
         if choice == 1:
+            # 'translate = False' runs code in English
+            translate = False
             characters = character_select(translate)
             health, ai_health = quiz(characters, translate)
             end(characters, health, ai_health, translate)        
-            
+                
         elif choice == 2:
+            # 'translate = True' runs code in Te Reo
             translate = True
             characters = character_select(translate)
             health, ai_health = quiz(characters, translate)
             end(characters, health, ai_health, translate)        
 
         elif choice == 3:
-            quit
+            # exits the code as user would not like to keep playing
+            print("Thank you for choosing this Dental RPG")
+            sys.exit()
 
-        loop_choice = force_number("Would you like to play again?\n(1) Yes\n(2) No\n> ")
-        if loop == 1:
-            loop = True
-        elif loop == 2:
-            loop = False
-            print("Thanks for playing!")
+        while not (loop_choice in loop_valid_input):
+            loop_choice = force_number("""Would you like to keep playing?
+(1) Yes
+(2) No
+> """)
+            if loop_choice == 1:
+                loop = True
+            elif loop_choice == 2:
+                loop = False
+
+    if loop == False:
+        print("Thank you for choosing this Dental RPG")
 
 
 def character_select(translate):
@@ -66,8 +85,6 @@ def character_select(translate):
     Allows the user to select their character
     Also rolls a random character for the user
     """
-    # variables that will be used
-    import random
     roll = 0
     EMPTY = ""
     choice = 0
@@ -177,11 +194,18 @@ def quiz(characters, translate):
         print("Opponent health     |  {:.0f}% HP".format(ai_health))
         print("=================================")
         print()
+        print("---------------------------------")
+        print()
         print("Every move has a chance of hitting a critical attack")
         print("There is a 1.5x multiplier for damage")
-        print("Move 1 - 20% crit chance")
-        print("Move 2 - 15% crit chance")
+        print("Move 1 - 50% crit chance")
+        print("Move 2 - 20% crit chance")
         print("Move 3 - 10% crit chance")
+        print()
+        print("Every move also has a chance of missing")
+        print("For every move there is a 5% chance of missing")
+        print()
+        print("---------------------------------")
         print()
 
         for question, correct_answer in questions.items():
@@ -193,27 +217,17 @@ def quiz(characters, translate):
                 print()
                 if user_answer == correct_answer:
                     print("You are correct")
-                    ai_health = attack(characters, health, ai_health, translate)
-                    print()
-                    print("---------------------------------")
-                    print()
+                    ai_health = attacking(characters, health, ai_health, translate)
                     if ai_health > 0:
                         health = ai_attack(characters, health, ai_health, translate)
-                    print()
-                    print("---------------------------------")
                     print()
 
                 elif user_answer != correct_answer:
                     print("You are incorrect")
                     print("The right answer was '{}'".format(correct_answer))
                     print("You cannot attack as you answered wrong :(")
-                    print()
-                    print("---------------------------------")
-                    print()
                     if ai_health > 0:
                         health = ai_attack(characters, health, ai_health, translate)
-                    print()
-                    print("---------------------------------")
                     print()
             elif health <= 0 or ai_health <= 0:
                 break
@@ -226,12 +240,20 @@ def quiz(characters, translate):
         print("Opponent hauora     |  {:.0f}% HP".format(ai_health))
         print("=================================")
         print()
+        print("---------------------------------")
+        print()
         print("Every move has a chance of hitting a critical attack")
         print("There is a 1.5x multiplier for damage")
-        print("Move 1 - 20% crit chance")
-        print("Move 2 - 15% crit chance")
+        print("Move 1 - 50% crit chance")
+        print("Move 2 - 20% crit chance")
         print("Move 3 - 10% crit chance")
         print()
+        print("Every move also has a chance of missing")
+        print("For every move there is a 5% chance of missing")
+        print()
+        print("---------------------------------")
+        print()
+
 
         for question, correct_answer in questions_translated.items():
             if health > 0 and ai_health > 0:
@@ -242,27 +264,17 @@ def quiz(characters, translate):
                 print()
                 if user_answer == correct_answer:
                     print("You are correct")
-                    ai_health = attack(characters, health, ai_health, translate)
-                    print()
-                    print("---------------------------------")
-                    print()
+                    ai_health = attacking(characters, health, ai_health, translate)
                     if ai_health > 0:
                         health = ai_attack(characters, health, ai_health, translate)
-                    print()
-                    print("---------------------------------")
                     print()
 
                 elif user_answer != correct_answer:
                     print("You are incorrect")
                     print("The right answer was '{}'".format(correct_answer))
                     print("You cannot attack as you answered wrong :(")
-                    print()
-                    print("---------------------------------")
-                    print()
                     if ai_health > 0:
                         health = ai_attack(characters, health, ai_health, translate)
-                    print()
-                    print("---------------------------------")
                     print()
             elif health <= 0 or ai_health <= 0:
                 break
@@ -274,14 +286,14 @@ def random_crit(choice, damage):
     """
     Randomises if attack is a miss or not
     """
-    import random
     chance = 0
     valid_chance = 0
+    new_damage = 0
     crit = False
 
     if choice == 1:
-        chance = random.randint(1, 10)
-        valid_chance = random.randint(1, 10)
+        chance = random.randint(1, 2)
+        valid_chance = random.randint(1, 2)
         if chance == valid_chance:
             new_damage = damage * 1.5
             crit = True
@@ -289,8 +301,8 @@ def random_crit(choice, damage):
             new_damage = damage
             
     elif choice == 2:
-        chance = random.randint(1, 15)
-        valid_chance = random.randint(1, 15)
+        chance = random.randint(1, 5)
+        valid_chance = random.randint(1, 5)
         if chance == valid_chance:
             new_damage = damage * 1.5
             crit = True
@@ -298,8 +310,8 @@ def random_crit(choice, damage):
             new_damage = damage
             
     elif choice == 3:
-        chance = random.randint(1, 20)
-        valid_chance = random.randint(1, 20)
+        chance = random.randint(1, 10)
+        valid_chance = random.randint(1, 10)
         if chance == valid_chance:
             new_damage = damage * 1.5
             crit = True
@@ -309,7 +321,48 @@ def random_crit(choice, damage):
     return crit, new_damage
 
 
-def attack(characters, health, ai_health, translate):
+def random_miss(attack):
+    """
+    Randomises chances for a missed attack
+    """
+    chance = 0
+    valid_chance = 0
+    miss = False
+            
+    chance = random.randint(1, 20)
+    valid_chance = random.randint(1, 20)
+    if chance == valid_chance:
+        attack = False
+    else:
+        attack = True
+
+    return attack
+
+
+def crit_miss_attacking(choice, ai_health, damage, damage_list, move_list):
+    """
+    Function which runs through randomised crit
+    and randomised miss functions to give an attack
+    """
+    crit = False
+    attack = True
+    
+    attack = random_miss(attack)
+    if attack == True:
+        choice -= 1
+        move_name = move_list[choice]
+        damage = damage_list[choice]
+        crit, damage = random_crit(choice, damage)
+        if crit == True:
+            print("Critical hit!")
+        ai_health -= damage
+    elif attack == False:
+        print("You have missed your attack")
+
+    return move_name, damage, attack, ai_health
+
+
+def attacking(characters, health, ai_health, translate):
     """
     If user gets the answer correct they may
     choose an attack to use against the AI
@@ -339,7 +392,7 @@ def attack(characters, health, ai_health, translate):
     count = 1
     move_list = []
     damage_list = []
-    crit = False
+    attack = True
 
     if translate == False:
         if characters[0] == "Toothbrush":
@@ -351,28 +404,12 @@ def attack(characters, health, ai_health, translate):
                 count += 1
             while not (choice in valid_input):
                 choice = force_number("> ")
-                
-            if choice == 1:
-                move_name = move_list[0]
-                damage = damage_list[0]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 2:
-                move_name = move_list[1]
-                damage = damage_list[1]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 3:
-                move_name = move_list[2]
-                damage = damage_list[3]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
+                print()
+            move_name, damage, attack, ai_health = crit_miss_attacking(choice,
+                                                                       ai_health,
+                                                                       damage,
+                                                                       damage_list,
+                                                                       move_list)
 
         elif characters[0] == "Floss":
             print("Choose a move:")
@@ -383,28 +420,12 @@ def attack(characters, health, ai_health, translate):
                 count += 1
             while not (choice in valid_input):
                 choice = force_number("> ")
-            
-            if choice == 1:
-                move_name = move_list[0]
-                damage = damage_list[0]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 2:
-                move_name = move_list[1]
-                damage = damage_list[1]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 3:
-                move_name = move_list[2]
-                damage = damage_list[2]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
+                print()
+            move_name, damage, attack, ai_health = crit_miss_attacking(choice,
+                                                                       ai_health,
+                                                                       damage,
+                                                                       damage_list,
+                                                                       move_list)
 
         elif characters[0] == "Mouthwash":
             print("Choose a move:")
@@ -415,38 +436,26 @@ def attack(characters, health, ai_health, translate):
                 count += 1
             while not (choice in valid_input):
                 choice = force_number("> ")
-            
-            if choice == 1:
-                move_name = move_list[0]
-                damage = damage_list[0]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 2:
-                move_name = move_list[1]
-                damage = damage_list[1]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 3:
-                move_name = move_list[2]
-                damage = damage_list[2]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-
-        print()
-        print("{} is attacking...".format(characters[0]))
-        print("{} is being cleaned with '{}' for {:.0f} DMG".format(characters[1], move_name, damage))
-        print()
-        if ai_health > 0 and health > 0:
-            print("=================================")
-            print("Your health         |  {:.0f}% HP".format(health))
-            print("Opponent health     |  {:.0f}% HP".format(ai_health))
-            print("=================================")
+                print()
+            move_name, damage, attack, ai_health = crit_miss_attacking(choice,
+                                                                       ai_health,
+                                                                       damage,
+                                                                       damage_list,
+                                                                       move_list)
+        if attack == True:
+            print("{} is attacking...".format(characters[0]))
+            print("{} is being attacked with '{}' for {:.0f} DMG".format(characters[1], move_name, damage))
+            if ai_health > 0 and health > 0:
+                print("=================================")
+                print("Your health         |  {:.0f}% HP".format(health))
+                print("Opponent health     |  {:.0f}% HP".format(ai_health))
+                print("=================================")
+        elif attack == False:
+            if ai_health > 0 and health > 0:
+                print("=================================")
+                print("Your health         |  {:.0f}% HP".format(health))
+                print("Opponent health     |  {:.0f}% HP".format(ai_health))
+                print("=================================")
 
     # if user wants to translate to Te Reo
     elif translate == True:
@@ -459,29 +468,12 @@ def attack(characters, health, ai_health, translate):
                 count += 1
             while not (choice in valid_input):
                 choice = force_number("> ")
-            
-            if choice == 1:
-                move_name = move_list[0]
-                damage = damage_list[0]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 2:
-                move_name = move_list[1]
-                damage = damage_list[1]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 3:
-                move_name = move_list[2]
-                damage = damage_list[2]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-
+                print()
+            move_name, damage, attack, ai_health = crit_miss_attacking(choice,
+                                                                       ai_health,
+                                                                       damage,
+                                                                       damage_list,
+                                                                       move_list)             
 
         elif characters[0] == "Miro":
             print("Choose a move:")
@@ -492,28 +484,12 @@ def attack(characters, health, ai_health, translate):
                 count += 1
             while not (choice in valid_input):
                 choice = force_number("> ")
-            
-            if choice == 1:
-                move_name = move_list[0]
-                damage = damage_list[0]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 2:
-                move_name = move_list[1]
-                damage = damage_list[1]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 3:
-                move_name = move_list[2]
-                damage = damage_list[2]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
+                print()
+            move_name, damage, attack, ai_health = crit_miss_attacking(choice,
+                                                                       ai_health,
+                                                                       damage,
+                                                                       damage_list,
+                                                                       move_list)
 
         elif characters[0] == "Horoi horoi mangai":
             print("Choose a move:")
@@ -524,47 +500,57 @@ def attack(characters, health, ai_health, translate):
                 count += 1
             while not (choice in valid_input):
                 choice = force_number("> ")
-            
-            if choice == 1:
-                move_name = move_list[0]
-                damage = damage_list[0]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 2:
-                move_name = move_list[1]
-                damage = damage_list[1]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-            elif choice == 3:
-                move_name = move_list[2]
-                damage = damage_list[2]
-                crit, damage = random_crit(choice, damage)
-                if crit == True:
-                    print("Critical hit!")
-                ai_health -= damage
-
-        print()
-        print("{} is attacked...".format(characters[0]))
-        print("{} is being cleaned with '{}' for {:.0f} DMG".format(characters[1], move_name, damage))
-        print()
-        if ai_health > 0 and health > 0:
-            print("=================================")
-            print("Your hauora         |  {:.0f}% HP".format(health))
-            print("Opponent hauora     |  {:.0f}% HP".format(ai_health))
-            print("=================================")
+                print()
+            move_name, damage, attack, ai_health = crit_miss_attacking(choice,
+                                                                       ai_health,
+                                                                       damage,
+                                                                       damage_list,
+                                                                       move_list)
+        if attack == True:
+            print("{} is attacking...".format(characters[0]))
+            print("{} is being attacked with '{}' for {:.0f} DMG".format(characters[1], move_name, damage))
+            if ai_health > 0 and health > 0:
+                print("=================================")
+                print("Your health         |  {:.0f}% HP".format(health))
+                print("Opponent health     |  {:.0f}% HP".format(ai_health))
+                print("=================================")
+        elif attack == False:
+            if ai_health > 0 and health > 0:
+                print("=================================")
+                print("Your health         |  {:.0f}% HP".format(health))
+                print("Opponent health     |  {:.0f}% HP".format(ai_health))
+                print("=================================")
 
     return ai_health
+
+
+def ai_crit_miss_attacking(choice, health, damage, damage_list, move_list):
+    """
+    Function which runs through the AI's crit and miss
+    rates and calculates any change needed
+    """
+    crit = False
+    attack = True
+    NO_ATTACK = 0
+
+    attack = random_miss(attack)
+    if attack == True:
+        move_name = move_list[choice]
+        damage = damage_list[choice]
+        crit, damage = random_crit(choice, damage)
+        if crit == True:
+            print("Critical hit!")
+        health -= damage
+    elif attack == False:
+        health += NO_ATTACK
+
+    return move_name, damage, attack, health
 
 
 def ai_attack(characters, health, ai_health, translate):
     """
     AI attacks the user
     """
-    import random
     moveset = {10: "Poor Attack",
                20: "Good Attack",
                30: "Perfect Attack"}
@@ -576,91 +562,76 @@ def ai_attack(characters, health, ai_health, translate):
     move_name = ""
     damage = 0
     choice = 0
-    crit = False
 
     # randomly rolls a number which will
     # dictate the attack
-    choice = random.randint(1, 3)
-    
+    choice = random.randint(0, 2)
+
+    # if user selected English
     if translate == False:
         for damage, move in sorted(moveset.items()):
             move_list.append(move)
             damage_list.append(damage)
-            
-        if choice == 1:
-            move_name = move_list[0]
-            damage = damage_list[0]
-            crit, damage = random_crit(choice, damage)
-            if crit == True:
-                print("Critical hit!")
-            health -= damage
-        elif choice == 2:
-            move_name = move_list[1]
-            damage = damage_list[1]
-            crit, damage = random_crit(choice, damage)
-            if crit == True:
-                print("Critical hit!")
-            health -= damage                
-        elif choice == 3:
-            move_name = move_list[2]
-            damage = damage_list[2]
-            crit, damage = random_crit(choice, damage)
-            if crit == True:
-                print("Critical hit!")
-            health -= damage
-
-        print("{} is attacking...".format(characters[1]))
-        print("{} is being attacked with '{}' for {:.0f} DMG".format(characters[0], move_name, damage))
         print()
-        if ai_health > 0 and health > 0:
-            print("=================================")
-            print("Your health         |  {:.0f}% HP".format(health))
-            print("Opponent health     |  {:.0f}% HP".format(ai_health))
-            print("=================================")
+        move_name, damage, attack, health = ai_crit_miss_attacking(choice,
+                                                                   health,
+                                                                   damage,
+                                                                   damage_list,
+                                                                   move_list)
+        if attack == True:
+            print("{} is attacking...".format(characters[1]))
+            print("{} is being attacked with '{}' for {:.0f} DMG".format(characters[0], move_name, damage))
+            if ai_health > 0 and health > 0:
+                print("=================================")
+                print("Your health         |  {:.0f}% HP".format(health))
+                print("Opponent health     |  {:.0f}% HP".format(ai_health))
+                print("=================================")
+        elif attack == False:
+            if ai_health > 0 and health > 0:
+                print("=================================")
+                print("Your health         |  {:.0f}% HP".format(health))
+                print("Opponent health     |  {:.0f}% HP".format(ai_health))
+                print("=================================")
 
+    # if user selected Te Reo
     elif translate == True:
         for damage, move in sorted(moveset_translated.items()):
             move_list.append(move)
             damage_list.append(damage)
-            
-        if choice == 1:
-            move_name = move_list[0]
-            damage = damage_list[0]
-            crit, damage = random_crit(choice, damage)
-            if crit == True:
-                print("Critical hit!")
-            health -= damage
-        elif choice == 2:
-            move_name = move_list[1]
-            damage = damage_list[1]
-            crit, damage = random_crit(choice, damage)
-            if crit == True:
-                print("Critical hit!")
-            health -= damage                
-        elif choice == 3:
-            move_name = move_list[2]
-            damage = damage_list[2]
-            crit, damage = random_crit(choice, damage)
-            if crit == True:
-                print("Critical hit!")
-            health -= damage                
-
-        print("{} is attacking...".format(characters[1]))
-        print("{} is being attacked with '{}' for {:.0f} DMG".format(characters[0], move_name, damage))
         print()
-        if ai_health > 0 and health > 0:
-            print("=================================")
-            print("Your hauora         |  {:.0f}% HP".format(health))
-            print("Opponent hauora     |  {:.0f}% HP".format(ai_health))
-            print("=================================")
+        move_name, damage, attack, health = ai_crit_miss_attacking(choice,
+                                                                   health,
+                                                                   damage,
+                                                                   damage_list,
+                                                                   move_list)
+        if attack == True:
+            print("{} is attacking...".format(characters[1]))
+            print("{} is being attacked with '{}' for {:.0f} DMG".format(characters[0], move_name, damage))
+            if ai_health > 0 and health > 0:
+                print("=================================")
+                print("Your health         |  {:.0f}% HP".format(health))
+                print("Opponent health     |  {:.0f}% HP".format(ai_health))
+                print("=================================")
+        elif attack == False:
+            if ai_health > 0 and health > 0:
+                print("=================================")
+                print("Your health         |  {:.0f}% HP".format(health))
+                print("Opponent health     |  {:.0f}% HP".format(ai_health))
+                print("=================================")       
 
     return health
-
+            
 
 def end(characters, health, ai_health, translate):
     """
+    End statements which show the user what
+    has happened/'aftermath' of game
     """
 
+    print("---------------------------------")
+    print("---------------------------------")
+    print()
+    
     if translate == False:
         if health > ai_health:
             if ai_health < 0:
