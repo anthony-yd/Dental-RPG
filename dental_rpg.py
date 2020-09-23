@@ -366,25 +366,14 @@ def crit_miss_attacking(choice, ai_health, damage_value, characters):
     """
     crit = False
     attack = True
-    valid_input = [1, 2]
-    crit_choice = 0
     
     attack = random_miss(attack)
     if attack == True:
-        while not (crit_choice in valid_input):
-            crit_choice = force_number("Try for critical hit?\n(1) Yes\n(2) No\n> ")
-            print()
-        if crit_choice == 1:
-            crit, damage_value = random_crit(choice, damage_value)
-            print("{} is attacking...".format(characters[0]))
-            if crit == True:
-                print("Critical hit!")
-                ai_health -= damage_value
-            elif crit == False:
-                print("You took a gamble and failed")
-                print("No damage has been dealt")            
-        elif crit_choice == 2:
-            ai_health -= damage_value
+        crit, damage_value = random_crit(choice, damage_value)
+        print("{} is attacking...".format(characters[0]))
+        if crit == True:
+            print("Critical hit!")
+        ai_health -= damage_value          
     elif attack == False:
         print("You have missed your attack")
 
