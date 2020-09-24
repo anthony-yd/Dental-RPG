@@ -45,23 +45,24 @@ There is a 1.5x multiplier for damage
 Move 1 - 50% crit chance
 Move 2 - 20% crit chance
 Move 3 - 10% crit chance
-But be careful!
-If you don't hit your critical attack then you do not attack that round!
 ---------------------------------
 Missing Attacks
 
 Every move has a chance of missing
 The miss chance is the same for every move
 This means they all have a 5% chance of missing
----------------------------------""")
+---------------------------------
+Disclaimer
+
+Do not attempt at home or work""")
     print()
     while loop == True:
         # sets choice back to 0 if user wishes to play again
         choice = 0
         while not (choice in valid_input):
             choice = force_number("""Please choose an option:
-(1) Start game in English
-(2) Start game in Te Reo
+(1) Start game (in English)
+(2) Start game (in Te Reo)
 (3) Quit
 > """)
         print()
@@ -82,7 +83,7 @@ This means they all have a 5% chance of missing
 
         elif choice == 3:
             # exits the code as user would not like to keep playing
-            print("Thank you for choosing this Dental RPG")
+            print("Thank you for choosing this Dental RPG (つ•̀ᴥ•́)つ*:･ﾟ✧")
             sys.exit()
 
         while not (loop_choice in loop_valid_input):
@@ -90,13 +91,14 @@ This means they all have a 5% chance of missing
 (1) Yes
 (2) No
 > """)
+            print()
             if loop_choice == 1:
                 loop = True
             elif loop_choice == 2:
                 loop = False
 
     if loop == False:
-        print("Thank you for choosing this Dental RPG")
+        print("Thank you for choosing this Dental RPG ( ͡° ͜ʖ ͡°)=ε✄")
 
 
 def character_select(translate):
@@ -111,7 +113,9 @@ def character_select(translate):
     user = ""
     opponent = ""
     characters = ["(1) Toothbrush", "(2) Floss", "(3) Mouthwash"]
-    characters_te_reo = ["(1) Paraihe niho", "(2) Miro", "(3) Horoi horoi mangai"]
+    characters_te_reo = ["(1) Paraihe niho/Toothbrush",
+                         "(2) Miro/Floss",
+                         "(3) Horoi horoi mangai/Mouthwash"]
     valid_input = [1, 2, 3]
 
     # asks user for name and error checks it
@@ -132,11 +136,11 @@ def character_select(translate):
         while not (choice in valid_input):
             choice = force_number("Please choose a character\n> ")
         if choice == 1:
-            user = "Toothbrush"
+            user = "Toothbrush ╰( ͡° ͜ʖ ͡° )つ──☆*:・ﾟ"
         elif choice == 2:
-            user = "Floss"
+            user = "Floss (∩ ͡ ° ʖ ͡ °) ⊃-(===>"
         elif choice == 3:
-            user = "Mouthwash"
+            user = "Mouthwash (ノ͡° ͜ʖ ͡°)ノ︵┻┻"
             
     elif translate == True:
         for character in characters_te_reo:
@@ -144,30 +148,30 @@ def character_select(translate):
         while not (choice in valid_input):
             choice = force_number("Please choose a pūāhua/character\n> ")
         if choice == 1:
-            user = "Paraihe niho"
+            user = "Paraihe niho ╰( ͡° ͜ʖ ͡° )つ──☆*:・ﾟ"
         elif choice == 2:
-            user = "Miro"
+            user = "Miro (∩ ͡ ° ʖ ͡ °) ⊃-(===>"
         elif choice == 3:
-            user = "Horoi horoi mangai"
+            user = "Horoi horoi mangai (ノ͡° ͜ʖ ͡°)ノ︵┻┻"
         
     # randomly rolls a character that will
     # be used by the ai
     roll = random.randint(0, 2)
     if translate == False:
         if roll == 0:
-            opponent = "Plaque"
+            opponent = "Plaque (   ͡°╭╮ʖ   ͡°)"
         elif roll == 1:
-            opponent = "Bad Breath"
+            opponent = "Bad Breath [ﾉಠೃಠ]︻̷┻̿═━一"
         elif roll == 2:
-            opponent = "Cavities"
+            opponent = "Cavities ༼▃ Ĺ̯ ▃༽"
             
     elif translate == True:
         if roll == 0:
-            opponent = "Kaupapa"
+            opponent = "Kaupapa (   ͡°╭╮ʖ   ͡°)"
         elif roll == 1:
-            opponent = "Manawa kino"
+            opponent = "Manawa kino [ﾉಠೃಠ]︻̷┻̿═━一"
         elif roll == 2:
-            opponent = "Rongonui"  
+            opponent = "Rongonui ༼▃ Ĺ̯ ▃༽"  
 
     print("You have chosen {}\n".format(user))
     characters = [user, opponent, username]
@@ -271,7 +275,7 @@ def quiz(characters, translate):
         random.shuffle(combined)
         question_list, answer_list = list(zip(*combined))
         for number in question_list:
-            randomised_questions[question_list[count]] = answer_list[count]
+            randomised_questions_translated[question_list[count]] = answer_list[count]
             count += 1
 
         for question, correct_answer in randomised_questions_translated.items():
@@ -375,7 +379,7 @@ def crit_miss_attacking(choice, ai_health, damage_value, characters):
             print("Critical hit!")
         ai_health -= damage_value          
     elif attack == False:
-        print("You have missed your attack")
+        print("{}, you have missed your attack (=ಠ ل͟ ಠ=)".format(characters[0]))
 
     return damage_value, attack, ai_health
 
@@ -385,22 +389,22 @@ def attacking(characters, health, ai_health, translate):
     If user gets the answer correct they may
     choose an attack to use against the AI
     """
-    toothbrush = {10: "Poor Brush",
-                  20: "Good Brush",
-                  30: "Perfect Brush"}
-    toothbrush_translated = {10: "Poor Paraihe",
+    toothbrush = {10: "Quick Brushing",
+                  20: "Good Brushing",
+                  30: "Perfect Brushing"}
+    toothbrush_translated = {10: "Quick Paraihe",
                              20: "Good Paraihe",
                              30: "Perfect Paraihe"}
-    floss = {10: "Poor Floss",
-             20: "Good Floss",
-             30: "Perfect Floss"}
-    floss_translated = {10: "Poor Miro",
+    floss = {10: "Quick Flossing",
+             20: "Good Flossing",
+             30: "Perfect Flossing"}
+    floss_translated = {10: "Quick Miro",
                         20: "Good Miro",
                         30: "Perfect Miro"}
-    mouthwash = {10: "Poor Mouthwash",
-                 20: "Good Mouthwash",
-                 30: "Perfect Mouthwash"}
-    mouthwash_translated = {10: "Poor Horoi horoi mangai",
+    mouthwash = {10: "Quick Mouthwashing",
+                 20: "Good Mouthwashing",
+                 30: "Perfect Mouthwashing"}
+    mouthwash_translated = {10: "Quick Horoi horoi mangai",
                             20: "Good Horoi horoi mangai",
                             30: "Perfect Horoi horoi mangai"}
     valid_input = [1, 2, 3]
@@ -413,7 +417,7 @@ def attacking(characters, health, ai_health, translate):
     attack = True
 
     if translate == False:
-        if characters[0] == "Toothbrush":
+        if characters[0] == "Toothbrush ╰( ͡° ͜ʖ ͡° )つ──☆*:・ﾟ":
             print("Choose a move:")
             for damage, move in sorted(toothbrush.items()):
                 print("({}) {} - {} DMG".format(count, move, damage))
@@ -431,7 +435,7 @@ def attacking(characters, health, ai_health, translate):
                                                                   damage_value,
                                                                   characters)
 
-        elif characters[0] == "Floss":
+        elif characters[0] == "Floss (∩ ͡ ° ʖ ͡ °) ⊃-(===>":
             print("Choose a move:")
             for damage, move in sorted(floss.items()):
                 print("({}) {} - {} DMG".format(count, move, damage))
@@ -449,7 +453,7 @@ def attacking(characters, health, ai_health, translate):
                                                                   damage_value,
                                                                   characters)
 
-        elif characters[0] == "Mouthwash":
+        elif characters[0] == "Mouthwash (ノ͡° ͜ʖ ͡°)ノ︵┻┻":
             print("Choose a move:")
             for damage, move in sorted(mouthwash.items()):
                 print("({}) {} - {} DMG".format(count, move, damage))
@@ -565,13 +569,14 @@ def ai_crit_miss_attacking(choice, health, damage_value, characters):
     attack = True
 
     attack = random_miss(attack)
-    if attack == True:        
+    if attack == True:
         crit, damage_value = random_crit(choice, damage_value)
+        print("{} is attacking...".format(characters[1]))
         if crit == True:
             print("Critical hit!")
         health -= damage_value
     elif attack == False:
-        print("{} has missed their attack".format(characters[1]))
+        print("{} has missed their attack ┌( ◕ 益 ◕ )ᓄ".format(characters[1]))
 
     return damage_value, attack, health
 
@@ -580,9 +585,9 @@ def ai_attack(characters, health, ai_health, translate):
     """
     AI attacks the user
     """
-    moveset = {10: "Poor Attack",
-               20: "Good Attack",
-               30: "Perfect Attack"}
+    moveset = {10: "Slow Attack",
+               20: "Sneak Attack",
+               30: "Damaging Attack"}
     moveset_translated = {10: "Poor Whakaeke",
                           20: "Good Whakaeke",
                           30: "Perfect Whakaeke"}
@@ -609,7 +614,6 @@ def ai_attack(characters, health, ai_health, translate):
                                                               damage_value,
                                                               characters)
         if attack == True:
-            print("{} is attacking...".format(characters[1]))
             print("{} is being attacked with '{}' for {:.0f} DMG".format(characters[0], move_name, damage_value))
             if ai_health > 0 and health > 0:
                 print("=================================")
@@ -669,14 +673,14 @@ def end(characters, health, ai_health, translate):
                 print("Your health         |  {:.0f}% HP".format(health))
                 print("Opponent health     |  0% HP")
                 print("=================================")
-                print("Congratulations, {}, you have conquered bad dental hygiene :)".format(characters[2]))
+                print("Congratulations, {}, you have conquered bad dental hygiene ヽ(”`▽´)ﾉ".format(characters[2]))
                 print()
             else:
                 print("=================================")
                 print("Your health         |  {:.0f}% HP".format(health))
                 print("Opponent health     |  {:.0f}% HP".format(ai_health))
                 print("=================================")
-                print("Congratulations, {}, you have conquered bad dental hygiene :)".format(characters[2]))
+                print("Congratulations, {}, you have conquered bad dental hygiene ╚═╏ ⇀ ͜ر ↼ ╏═╝".format(characters[2]))
                 print()
 
         elif health < ai_health:
@@ -685,14 +689,14 @@ def end(characters, health, ai_health, translate):
                 print("Your health         |  0% HP")
                 print("Opponent health     |  {:.0f}% HP".format(ai_health))
                 print("=================================")
-                print("Sadly, {}, you have not be able to conquer bad dental hygiene :(".format(characters[2]))
+                print("Sadly, {}, you have not be able to conquer bad dental hygiene ┏༼ ◉ ╭╮ ◉༽┓".format(characters[2]))
                 print()
             else:
                 print("=================================")
                 print("Your health         |  {:.0f}% HP".format(health))
                 print("Opponent health     |  {:.0f}% HP".format(ai_health))
                 print("=================================")
-                print("Sadly, {}, you have not be able to conquer bad dental hygiene :(".format(characters[2]))
+                print("Sadly, {}, you have not be able to conquer bad dental hygiene ( ◕ ʖ̯ ◕ )".format(characters[2]))
                 print()
 
         elif health == ai_health:
@@ -710,14 +714,14 @@ def end(characters, health, ai_health, translate):
                 print("Your hauora         |  {:.0f}% HP".format(health))
                 print("Opponent hauora     |  0% HP")
                 print("=================================")
-                print("Congratulations, {}, you have conquered kino akuaku niho/bad dental hygiene :)".format(characters[2]))
+                print("Congratulations, {}, you have conquered kino akuaku niho/bad dental hygiene ٩(◕‿◕｡)۶".format(characters[2]))
                 print()
             else:
                 print("=================================")
                 print("Your hauora         |  {:.0f}% HP".format(health))
                 print("Opponent hauora     |  {:.0f}% HP".format(ai_health))
                 print("=================================")
-                print("Congratulations, {}, you have conquered kino akuaku niho/bad dental hygiene :)".format(characters[2]))
+                print("Congratulations, {}, you have conquered kino akuaku niho/bad dental hygiene ໒( ◔ ▽ ◔ )७".format(characters[2]))
                 print()
 
         elif health < ai_health:
@@ -726,14 +730,14 @@ def end(characters, health, ai_health, translate):
                 print("Your hauora         |  0% HP")
                 print("Opponent hauora     |  {:.0f}% HP".format(ai_health))
                 print("=================================")
-                print("Sadly, {}, you have not be able to conquer kino akuaku niho/bad dental hygiene :(".format(characters[2]))
+                print("Sadly, {}, you have not be able to conquer kino akuaku niho/bad dental hygiene ( ຈ ﹏ ຈ )".format(characters[2]))
                 print()
             else:
                 print("=================================")
                 print("Your hauora         |  {:.0f}% HP".format(health))
                 print("Opponent hauora     |  {:.0f}% HP".format(ai_health))
                 print("=================================")
-                print("Sadly, {}, you have not be able to conquer kino akuaku niho/bad dental hygiene :(".format(characters[2]))
+                print("Sadly, {}, you have not be able to conquer kino akuaku niho/bad dental hygiene 〳 ‾́ ﹏ ‾́ 〵".format(characters[2]))
                 print()
 
         elif health == ai_health:
@@ -741,7 +745,7 @@ def end(characters, health, ai_health, translate):
             print("Your hauora         |  {:.0f}% HP".format(health))
             print("Opponent hauora     |  {:.0f}% HP".format(ai_health))
             print("=================================")
-            print("Weirdly, {}, you have tied with {}".format(characters[2], characters[1]))
+            print("Weirdly, {}, you have tied with {} ╰། ◉ ◯ ◉ །╯".format(characters[2], characters[1]))
             print()
 
 
